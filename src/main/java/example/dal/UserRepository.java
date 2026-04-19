@@ -22,6 +22,7 @@ public class UserRepository extends BaseRepository<User> {
     private static final String GET_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?";
     private static final String GET_ALL_QUERY  = "SELECT * FROM users";
     private static final String UPDATE_QUERY = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?";
+    private static final String EXIST_BY_ID = "SELECT 1 FROM users WHERE id = ?";
 
     public User save(User user) {
         long id = insert(
@@ -63,6 +64,9 @@ public class UserRepository extends BaseRepository<User> {
         return exist(NAME_EXIST_QUERY, name);
     }
 
+    public boolean isExistId(Long id) {
+        return exist(EXIST_BY_ID, id);
+    }
 
 
 }
