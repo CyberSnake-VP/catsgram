@@ -1,6 +1,8 @@
 package example.services;
 
 import example.dal.UserRepository;
+import example.dto.request.user.CreateUserRequest;
+import example.dto.response.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,5 +18,9 @@ public class UserService {
      */
     private final UserRepository userRepository;
 
+
+    public UserResponse create(CreateUserRequest request) {
+
+    }
 
 }
