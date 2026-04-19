@@ -28,6 +28,7 @@ services:
         psql postgresql://dbuser:12345@db:5432/catsgram -v ON_ERROR_STOP=1 <<-EOSQL
           DROP TABLE IF EXISTS posts;
           DROP TABLE IF EXISTS users;
+          DROP TABLE IF EXISTS images;
         
           CREATE TABLE IF NOT EXISTS users (
             id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -39,8 +40,15 @@ services:
         
           CREATE TABLE IF NOT EXISTS posts (
             id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-            author_id BIGINT NOT NULL REFERENCES users(id),
+            author_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
             description TEXT,
             post_date TIMESTAMP WITH TIME ZONE NOT NULL
+          );
+        
+          CREATE TABLE IF NOT EXISTS images (
+            id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+            original_name VARCHAR(255),
+            post_id BIGINT NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+            file_path VARCHAR(1024) NOT NULL
           );
         EOSQL
