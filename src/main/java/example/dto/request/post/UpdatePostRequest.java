@@ -6,7 +6,7 @@ import lombok.Data;
 public class UpdatePostRequest {
     private String description;
 
-    public boolean hadDescription() {
+    public boolean hasDescription() {
         return description != null && !description.isBlank();
     }
 }
