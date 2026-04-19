@@ -11,7 +11,8 @@ import java.sql.Timestamp;
 public class UserRepository extends BaseRepository<User> {
     private static final String INSERT_QUERY = "INSERT INTO users (username, email, password, registration_date) " +
             "VALUES (?, ?, ?, ?) RETURNING id";
-
+    private static final String EMAIL_EXIST_QUERY = "SELECT 1 FROM users WHERE email = ? LIMIT 1";
+    private static final String NAME_EXIST_QUERY = "SELECT 1 FROM users WHERE username = ? LIMIT 1";
     public UserRepository(JdbcTemplate jdbc, RowMapper<User> rowMapper) {
         super(jdbc, rowMapper);
     }
@@ -26,6 +27,14 @@ public class UserRepository extends BaseRepository<User> {
         );
         user.setId(id);
         return user;
+    }
+
+    public boolean isExistEmail(String email) {
+        return exist(EMAIL_EXIST_QUERY, email);
+    }
+
+    public boolean isExistUsername(String name) {
+        return exist(NAME_EXIST_QUERY, name);
     }
 
 }
