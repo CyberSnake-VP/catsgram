@@ -3,6 +3,7 @@ package example.controller;
 import example.dto.request.user.CreateUserRequest;
 import example.dto.response.user.UserResponse;
 import example.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse create(@RequestBody CreateUserRequest request) {
+    public UserResponse create( @Valid @RequestBody CreateUserRequest request) {
         return userService.create(request);
     }
 }
