@@ -21,10 +21,10 @@ public abstract class BaseRepository<T> {
     private final RowMapper<T> rowMapper;
 
     protected Optional<T> findOne(String query, Object... args) {
-        try{
+        try {
             T result = jdbc.queryForObject(query, rowMapper, args);
             return Optional.ofNullable(result);
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
@@ -35,7 +35,7 @@ public abstract class BaseRepository<T> {
 
     protected void update(String query, Object... args) {
         int count = jdbc.update(query, args);
-        if(count == 0){
+        if (count == 0) {
             throw new InternalServerException(UPDATE_ERROR_MESSAGE);
         }
     }
@@ -51,10 +51,20 @@ public abstract class BaseRepository<T> {
         }, keyHolder);
 
         Long id = keyHolder.getKeyAs(Long.class);
-        if(id == null){
+        if (id == null) {
             throw new InternalServerException(UPDATE_ERROR_MESSAGE);
         }
         return id;
+    }
+
+    // для запросов SELECT 1 FROM users(или другая таблица) WHERE mail = ? LIMIT 1
+    protected boolean exist(String query, Object... args) {
+        try {
+            Integer result = jdbc.queryForObject(query, Integer.class, args);
+            return result != null && result > 0;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 
 }
