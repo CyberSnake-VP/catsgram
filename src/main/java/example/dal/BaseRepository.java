@@ -52,7 +52,7 @@ public abstract class BaseRepository<T> {
 
         Long id = keyHolder.getKeyAs(Long.class);
         if (id == null) {
-            throw new InternalServerException(UPDATE_ERROR_MESSAGE);
+            throw new InternalServerException(INSERT_ERROR_MESSAGE);
         }
         return id;
     }
