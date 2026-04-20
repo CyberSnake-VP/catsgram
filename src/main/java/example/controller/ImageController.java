@@ -4,10 +4,8 @@ import example.dto.response.image.ImageResponse;
 import example.services.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,6 +18,13 @@ public class ImageController {
     @ResponseStatus(HttpStatus.OK)
     public List<ImageResponse> getPostImages(@PathVariable Long postId) {
         return imageService.getPostImages(postId);
+    }
+
+    @PostMapping("/posts/{postId}/images")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<ImageResponse> savePostImages(@PathVariable Long postId,
+                                              @RequestParam("image") List<MultipartFile> files) {
+        return imageService.saveImages(files, postId);
     }
 
 
