@@ -2,6 +2,7 @@ package example.services;
 
 import example.dal.ImageRepository;
 import example.dal.PostRepository;
+import example.dto.response.image.ImageData;
 import example.dto.response.image.ImageResponse;
 import example.exception.ImageFileException;
 import example.exception.NotFoundException;
@@ -28,6 +29,11 @@ public class ImageService {
     private static final String IMAGE_SAVE_DIRECTORY = "src/main/resources/post-image-directory";
     private static final String FILE_SAVE_ERROR = "Ошибка при сохранении файла";
     private static final String POST_NOT_FOUND = "Пост не найден";
+    private static final String IMAGE_READ_EXCEPTION = "Ошибка при загрузке файла";
+    private static final String FILE_NOT_FOUND = "Файл не найден";
+    private static final String IMAGE_NOT_FOUND = "Картина(видео-файл) не найден(a)";
+
+
 
     public List<ImageResponse> getPostImages(Long postId) {
         return imageRepository.findAll(postId).stream()
@@ -95,5 +101,28 @@ public class ImageService {
                 .map(ImageMapper::toImageResponse)
                 .toList();
     }
+
+
+    /// МЕТОД ДЛЯ ВЫГРУЗКИ ФАЙЛА(КАРТИНКИ)
+    private byte[] loadFile(Image image) {
+        Path path = Paths.get(image.getFilePath());
+        if(Files.exists(path)) {
+            try{
+                return Files.readAllBytes(path);
+            }catch (IOException e) {
+                throw new ImageFileException(IMAGE_READ_EXCEPTION + " id: " + image.getId());
+            }
+        }
+        throw new ImageFileException(FILE_NOT_FOUND + " id: " + image.getId());
+    }
+
+    // МЕТОД КОНТРОЛЛЕРА ДЛЯ ЗАГРУЗКИ КАРТИНКИ
+    public ImageData getImageDate(Long id) {
+        Image image = imageRepository.findOne(id)
+                .orElseThrow(() -> new NotFoundException(IMAGE_NOT_FOUND));
+        byte[] imageDate = loadFile(image);
+        return new ImageData(imageDate, image.getOriginalName());
+    }
+
 
 }
