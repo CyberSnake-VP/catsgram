@@ -38,7 +38,7 @@ public class PostController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PostResponse update(@PathVariable Long id,
-                               @RequestBody UpdatePostRequest request) {
+                               @Valid @RequestBody UpdatePostRequest request) {
         return postService.update(id, request);
     }
 }

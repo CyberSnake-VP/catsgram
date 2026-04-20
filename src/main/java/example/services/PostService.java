@@ -11,6 +11,7 @@ import example.model.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -26,7 +27,10 @@ public class PostService {
         if(!userRepository.isExistId(request.getAuthorId())) {
             throw new NotFoundException(AUTHOR_NOT_FOUND + " id: " + request.getAuthorId());
         }
-        return PostMapper.toPostResponse(postRepository.create(PostMapper.toPost(request)));
+        Post post = PostMapper.toPost(request);
+        post.setPostDate(Instant.now());
+
+        return PostMapper.toPostResponse(postRepository.create(post));
     }
 
     public PostResponse findById(Long id) {

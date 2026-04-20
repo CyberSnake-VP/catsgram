@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 @Component
 public class PostRowMapper implements RowMapper<Post> {
@@ -16,7 +17,7 @@ public class PostRowMapper implements RowMapper<Post> {
         post.setId(rs.getLong("id"));
         post.setAuthorId(rs.getLong("author_id"));
         post.setDescription(rs.getString("description"));
-        post.setPostDate(rs.getDate("post_date").toInstant());
+        post.setPostDate((rs.getTimestamp("post_date").toInstant()));
         return post;
     }
 }
